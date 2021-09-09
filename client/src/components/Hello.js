@@ -7,7 +7,7 @@ const images = require.context('../../public/images', true);
 
 const Hello = () => {
     const [win, setWin] = useState("");
-    const [photo, setPhoto] = useState("");
+    const [photo, setPhoto] = useState([]);
 
     const getPart = async () => {
         const r = await gql(`{
@@ -19,15 +19,25 @@ const Hello = () => {
               lose3
             },
             photo(part_id: 1) {
+              id
               filename
             }
           }`);
-        setWin(r.part.win);
-          
-        const myPic = images(`./${r.photo.filename}.jpg`);
-        setPhoto(myPic.default);
 
-        
+        let allPics = [];
+        for (let i = 0; i < r.photo.length; i++) {
+            let myObject = {
+                id: null,
+                filename: null
+            }
+            const myPic = images(`./${r.photo[i].filename}.jpg`);
+            myObject.id = r.photo[i].id;
+            myObject.filename = myPic.default;
+            allPics[i] = myObject;
+        }
+        setPhoto(allPics);
+        setWin(r.part.win);
+
     }
 
     useEffect(() => {
@@ -37,7 +47,12 @@ const Hello = () => {
     return (
         <>
             <h1>{win || "Loading..."}</h1>
-            <img src={photo} alt="Part" width="500px" />
+            {
+                photo?.map(pic => (
+                    <img key={pic.id} src={pic.filename} alt="Part" width="500px" />
+                ))
+            }
+
         </>
     )
 }

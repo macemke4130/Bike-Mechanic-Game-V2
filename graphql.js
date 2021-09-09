@@ -5,7 +5,7 @@ export const schema = buildSchema(`
   type Query {
       greet: String
       part(id: Int!): Part
-      photo(part_id: Int!): Photo
+      photo(part_id: Int!): [Photo]
   }
 
   type Part {
@@ -34,7 +34,7 @@ export const root = {
     },
     photo: async (args) => {
         const r = await query("select * from photos where part_id = ?", [args.part_id]);
-        return r[0];
+        return r;
     }
 };
 
