@@ -5,6 +5,7 @@ export const schema = buildSchema(`
   type Query {
       greet: String
       part(id: Int!): Part
+      photo(part_id: Int!): Photo
   }
 
   type Part {
@@ -15,6 +16,12 @@ export const schema = buildSchema(`
     lose3: String
   }
 
+  type Photo {
+    id: Int
+    part_id: Int
+    filename: String
+  }
+
 `);
 
 export const root = {
@@ -23,6 +30,10 @@ export const root = {
     },
     part: async (args) => {
         const r = await query("select * from parts where id = ?", [args.id]);
+        return r[0];
+    },
+    photo: async (args) => {
+        const r = await query("select * from photos where part_id = ?", [args.part_id]);
         return r[0];
     }
 };

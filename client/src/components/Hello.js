@@ -3,21 +3,42 @@ import { useEffect, useState } from 'react';
 
 import { gql } from '../utils/gql';
 
-const Hello = () => {
-    const [greeting, setGreeting] = useState("");
+const images = require.context('../../public/images', true);
 
-    const getGreeting = async () => {
-        const r = await gql(`{part(id:1){id, win, lose1}}`);
-        console.log(r);
-        // setGreeting(r);
+const Hello = () => {
+    const [win, setWin] = useState("");
+    const [photo, setPhoto] = useState("");
+
+    const getPart = async () => {
+        const r = await gql(`{
+            part(id: 1) {
+              id
+              win
+              lose1
+              lose2
+              lose3
+            },
+            photo(part_id: 1) {
+              filename
+            }
+          }`);
+        setWin(r.part.win);
+          
+        const myPic = images(`./${r.photo.filename}.jpg`);
+        setPhoto(myPic.default);
+
+        
     }
 
     useEffect(() => {
-        getGreeting();
+        getPart();
     }, []);
 
     return (
-        <h1>{greeting || "Loading..."}</h1>
+        <>
+            <h1>{win || "Loading..."}</h1>
+            <img src={photo} alt="Part" width="500px" />
+        </>
     )
 }
 
