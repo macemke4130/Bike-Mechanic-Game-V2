@@ -7,8 +7,9 @@ const Hello = () => {
     const [greeting, setGreeting] = useState("");
 
     const getGreeting = async () => {
-        const r = await gql(`{greet}`);
-        setGreeting(r.greet);
+        const r = await gql(`{part(id:1){id, win, lose1}}`);
+        console.log(r);
+        // setGreeting(r);
     }
 
     useEffect(() => {

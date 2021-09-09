@@ -6,7 +6,6 @@
         - lose1
         - lose2
         - lose3
-        - lose4
     <!-- List of random wrong answers -->
     - wrong Table
         - id
