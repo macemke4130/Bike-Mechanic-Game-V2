@@ -4,6 +4,7 @@ import { query } from "./dbconnect.js";
 export const schema = buildSchema(`
   type Query {
       greet: String
+      allParts: [Part]
       part(id: Int!): Part
       photo(part_id: Int!): [Photo]
   }
@@ -27,6 +28,10 @@ export const schema = buildSchema(`
 export const root = {
     greet: () => {
         return "Hello Satan!"
+    },
+    allParts: async () => {
+        const r = await query("select * from parts");
+        return r;
     },
     part: async (args) => {
         const r = await query("select * from parts where id = ?", [args.id]);

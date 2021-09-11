@@ -30,7 +30,7 @@ create table photos (
 );
 
 insert into photos (part_id, filename) values (
-		1, "PXL_20210908_211745660"
+		2, "3715_lg_1000x.jpg"
 );
 
 select * from photos;

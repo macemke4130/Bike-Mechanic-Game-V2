@@ -16,3 +16,6 @@
 - Game Over
     - Enter your name for high score if high score is in top 10
     - 100% gets your name in the 100 Club
+- Quiz Page
+    - Params? IDK where to get the id of the part from.
+        - Load every id into an array and fetch when needed?

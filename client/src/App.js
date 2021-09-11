@@ -1,21 +1,21 @@
 import * as React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
-import Hello from "./components/Hello";
+import Play from "./pages/Play";
 
 function App() {
-  return (
+	return (
 		<Router>
 			<Switch>
 				<Route exact path="/">
-					<Hello />
+				<Link to="/play"><button>Click to play!</button></Link>
 				</Route>
 				<Route path="/play">
-					<div>This is the game page</div>
+					<Play />
 				</Route>
 			</Switch>
 		</Router>
-  )
+	)
 }
 
 export default App;
