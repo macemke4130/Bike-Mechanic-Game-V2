@@ -44,18 +44,18 @@ const Play = () => {
           }`);
         console.log(r.part.win);
 
-        // let allPics = [];
-        // for (let i = 0; i < r.photo.length; i++) {
-        //     let myObject = {
-        //         id: null,
-        //         filename: null
-        //     }
-        //     const myPic = images(`./${r.photo[i].filename}.jpg`);
-        //     myObject.id = r.photo[i].id;
-        //     myObject.filename = myPic.default;
-        //     allPics[i] = myObject;
-        // }
-        // setPhotos(allPics);
+        let allPics = [];
+        for (let i = 0; i < r.photo.length; i++) {
+            let myObject = {
+                id: null,
+                filename: null
+            }
+            const myPic = images(`./${r.photo[i].filename}.jpg`);
+            myObject.id = r.photo[i].id;
+            myObject.filename = myPic.default;
+            allPics[i] = myObject;
+        }
+        setPhotos(allPics);
 
         const allAnswers = [
             {
@@ -87,8 +87,14 @@ const Play = () => {
         getPart(nextPartId);
     }
 
-    const handleClick = (e) => {
-        console.log(e.target.innerText);
+    const handleChoice = (e) => {
+        const selected = e.target.innerText;
+        if (selected === win) {
+            console.log("Winner!");
+            getNext();
+        } else {
+            console.log("Loser!");
+        }
     }
 
     useEffect(() => {
@@ -102,8 +108,14 @@ const Play = () => {
             {/* Should the components be <images> <answers> and <feedback>? That may be easier.
             Should I do all fetch requests in this page component? */}
             {
+                photos?.map(photo => (
+                    <img key={photo.id} src={photo.filename} alt="Part" width="500px" className="quiz-part" />
+                ))
+            }
+            <hr></hr>
+            {
                 answers?.map(answer => (
-                    <button key={answer.id} id={answer.id} >{answer.name}</button>
+                    <button key={answer.id} onClick={handleChoice} >{answer.name}</button>
                 ))
             }
             {/* <Game part_id={currentPart} setGameProps={setGameProps} /> */}
