@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
-import Game from '../components/Game';
-import PartButton from '../components/PartButton';
-
 import { gql } from '../utils/gql';
+import Timer from '../components/Timer';
 const images = require.context('../../public/images', true);
 
 const Play = () => {
@@ -14,13 +12,15 @@ const Play = () => {
     const [answers, setAnswers] = useState([]);
     const [photos, setPhotos] = useState([]);
     const [index, setIndex] = useState(0);
+    const [totalScore, setTotalScore] = useState(0);
+    const [points, setPoints] = useState(1000);
+    const [resetTimer, setResetTimer] = useState(false);
 
     const getAllParts = async () => {
         try {
             const r = await gql(`{ allParts { id, win } }`);
             setAllParts(r.allParts);
             getPart(r.allParts[index].id);
-            setIndex(1);
             setLoading(false);
         } catch (e) {
             console.log(e);
@@ -28,60 +28,49 @@ const Play = () => {
     }
 
     const getPart = async (x) => {
-        console.log("Getting Part: " + x);
-        const r = await gql(`{
-            part(id: ${x}) {
-              id
-              win
-              lose1
-              lose2
-              lose3
-            },
-            photo(part_id: ${x}) {
-              id
-              filename
-            }
-          }`);
+        try {
+            const r = await gql(`{ part(id: ${x}) { id win lose1 lose2 lose3 }, photo(part_id: ${x}) { id filename }}`);
 
-        let allPics = [];
-        for (let i = 0; i < r.photo.length; i++) {
-            let myObject = {
-                id: null,
-                filename: null
+            let allPics = [];
+            for (let i = 0; i < r.photo.length; i++) {
+                let myObject = { id: null, filename: null }
+                const myPic = images(`./${r.photo[i].filename}.jpg`);
+                myObject.id = r.photo[i].id;
+                myObject.filename = myPic.default;
+                allPics[i] = myObject;
             }
-            const myPic = images(`./${r.photo[i].filename}.jpg`);
-            myObject.id = r.photo[i].id;
-            myObject.filename = myPic.default;
-            allPics[i] = myObject;
+            setPhotos(allPics);
+
+            const allAnswers = [
+                { id: 0, name: r.part.win },
+                { id: 1, name: r.part.lose1 },
+                { id: 2, name: r.part.lose2 },
+                { id: 3, name: r.part.lose3 }
+            ];
+            const shuffledAnswers = allAnswers.sort((a, b) => 0.5 - Math.random());
+            setAnswers(shuffledAnswers);
+            setWin(r.part.win);
+
+            if(index === 0) setIndex(1); // Fixes initial load index --
+
+            
+
+        } catch (e) {
+            console.error("Getting Part ID: " + x + " - " + e);
         }
-        setPhotos(allPics);
+    }
 
-        const allAnswers = [
-            {
-                id: 0,
-                name: r.part.win
-            },
-            {
-                id: 1,
-                name: r.part.lose1
-            },
-            {
-                id: 2,
-                name: r.part.lose2
-            },
-            {
-                id: 3,
-                name: r.part.lose3
-            }
-        ];
-        const shuffledAnswers = allAnswers.sort((a, b) => 0.5 - Math.random());
-        setAnswers(shuffledAnswers);
-        setWin(r.part.win);
+    const startPointsTimer = () => {
+        setPoints(1000);
+        const interval = setInterval(() => {
+            setPoints(points => points - 5);
+          }, 2500);
+          return () => clearInterval(interval);
     }
 
     const getNext = () => {
+        startPointsTimer();
         setIndex(index + 1);
-        console.log("Index: " + index);
         const nextPartId = allParts[index].id;
         getPart(nextPartId);
     }
@@ -89,23 +78,35 @@ const Play = () => {
     const handleChoice = (e) => {
         const selected = e.target.innerText;
         if (selected === win) {
-            console.log("Winner! Index = " + index);
+            setTotalScore(totalScore + points);
+            setResetTimer(true);
+            if (index === allParts.length) {
+                // 100 Club Logic --
+                console.log("All Questions Answered Correct!");
+                return;
+            }
+            setPoints(1000);
             getNext();
         } else {
+            // Game Over Logic --
             console.log("Loser!");
         }
     }
 
+    const updatePoints = (pointsFromTimer) => {
+       setPoints(pointsFromTimer);
+       setResetTimer(false);
+    }
+
     useEffect(() => {
-        getAllParts();
-    }, []);
+        if (loading) getAllParts();
+    });
 
     if (loading) return "Loading Play...";
 
     return (
         <>
-            {/* Should the components be <images> <answers> and <feedback>? That may be easier.
-            Should I do all fetch requests in this page component? */}
+        <Timer points={points} updatePoints={updatePoints} resetTimer={resetTimer} />
             {
                 photos?.map(photo => (
                     <img key={photo.id} src={photo.filename} alt="Part" width="500px" className="quiz-part" />
@@ -117,8 +118,7 @@ const Play = () => {
                     <button key={answer.id} onClick={handleChoice} >{answer.name}</button>
                 ))
             }
-            {/* <Game part_id={currentPart} setGameProps={setGameProps} /> */}
-            {/* <button onClick={getNext}>Next</button> */}
+            <p>{totalScore}</p>
         </>
     )
 }
