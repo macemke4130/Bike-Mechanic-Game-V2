@@ -10,7 +10,6 @@ const images = require.context('../../public/images', true);
 const Play = () => {
     const [loading, setLoading] = useState(true);
     const [allParts, setAllParts] = useState([]);
-    const [currentPart, setCurrentPart] = useState(null);
     const [win, setWin] = useState("");
     const [answers, setAnswers] = useState([]);
     const [photos, setPhotos] = useState([]);
@@ -20,7 +19,8 @@ const Play = () => {
         try {
             const r = await gql(`{ allParts { id, win } }`);
             setAllParts(r.allParts);
-            setCurrentPart(r.allParts[0].id);
+            getPart(r.allParts[index].id);
+            setIndex(1);
             setLoading(false);
         } catch (e) {
             console.log(e);
@@ -42,7 +42,6 @@ const Play = () => {
               filename
             }
           }`);
-        console.log(r.part.win);
 
         let allPics = [];
         for (let i = 0; i < r.photo.length; i++) {
@@ -90,7 +89,7 @@ const Play = () => {
     const handleChoice = (e) => {
         const selected = e.target.innerText;
         if (selected === win) {
-            console.log("Winner!");
+            console.log("Winner! Index = " + index);
             getNext();
         } else {
             console.log("Loser!");
@@ -119,7 +118,7 @@ const Play = () => {
                 ))
             }
             {/* <Game part_id={currentPart} setGameProps={setGameProps} /> */}
-            <button onClick={getNext}>Next</button>
+            {/* <button onClick={getNext}>Next</button> */}
         </>
     )
 }
