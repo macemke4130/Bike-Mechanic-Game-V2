@@ -12,6 +12,7 @@ const Game = (props) => {
     const [photos, setPhotos] = useState([]);
 
     const getPart = async () => {
+        console.log("GET PART");
         const r = await gql(`{
             part(id: ${props.part_id}) {
               id
@@ -104,7 +105,7 @@ const Game = (props) => {
                 ))
             }
             <p>{result}</p>
-            <button onClick={props.setGameProps}>Next</button>
+            {/* <button onClick={props.setGameProps}>Next</button> */}
 
         </>
     )

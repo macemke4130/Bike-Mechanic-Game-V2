@@ -13,7 +13,7 @@ create table parts (
 );
 
 insert into parts (win, lose1, lose2, lose3) values (
-	"SPD Cleat Spacer", "Front Derailleur Spacer", "Campagnolo Dropout Spacer", "FSA Aero Bar Shim"
+	"STI Band Clamp Bolt", "Sram Direct Mount Brake Lever Bolt", "Fender Stay Bolt", "Quill Bolt"
 );
 
 select * from parts;
@@ -30,7 +30,7 @@ create table photos (
 );
 
 insert into photos (part_id, filename) values (
-		2, "3715_lg_1000x.jpg"
+	2, "3715_lg_1000x.jpg"
 );
 
 select * from photos;
