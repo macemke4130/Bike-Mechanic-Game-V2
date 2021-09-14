@@ -2,9 +2,12 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 
 import { gql } from '../utils/gql';
+
 import Timer from '../components/Timer';
 import Nav from '../components/Nav';
 import Scoreboard from '../components/Scoreboard';
+import InputHighScore from '../components/InputHighScore';
+import { Button, AnswerDiv, PartImg, PhotoContainer, Feedback } from '../components/styles/Play.style';
 const images = require.context('../../public/images', true);
 
 const Play = () => {
@@ -19,12 +22,16 @@ const Play = () => {
     const [totalScore, setTotalScore] = useState(0);
     const [points, setPoints] = useState(500);
     const [inTopTen, setInTopTen] = useState(false);
+    const [club100, setClub100] = useState(false);
+    const [club100num, setClub100num] = useState(0);
+    const [scorePass, setScorePass] = useState(null);
     const [resetTimer, setResetTimer] = useState(false);
 
     const getAllParts = async () => {
         try {
             const r = await gql(`{ allParts { id, win } }`);
             setAllParts(r.allParts);
+            setClub100num(r.allParts.length);
             getPart(r.allParts[index].id);
             setLoading(false);
         } catch (e) {
@@ -76,7 +83,7 @@ const Play = () => {
             setResetTimer(true);
 
             if (index === allParts.length) {
-                // 100 Club Logic --
+                setClub100(true);
                 gameWin();
                 return;
             }
@@ -111,10 +118,14 @@ const Play = () => {
         if (totalScore > lowestHighScore) updateHighScore();
     }
 
-    const updateHighScore = async () => {
+    const updateHighScore = () => {
+        const scorePass = {
+            totalScore,
+            club100,
+            club100num
+        }
+        setScorePass(scorePass);
         setInTopTen(true);
-        
-        // const r = 
     }
 
     useEffect(() => {
@@ -126,15 +137,20 @@ const Play = () => {
     if (gameOver === false) {
         return (
             <>
-                <Timer points={points} updatePoints={updatePoints} resetTimer={resetTimer} />
-                {photos?.map(photo => (
-                    <img key={photo.id} src={photo.filename} alt="Part" width="500px" className="quiz-part" />
-                ))}
-                <hr></hr>
+                <PhotoContainer>
+                    {photos?.map(photo => (
+                        <PartImg key={photo.id} src={photo.filename} alt="Part" />
+                    ))}
+                </PhotoContainer>
                 {answers?.map(answer => (
-                    <button key={answer.id} onClick={handleChoice} >{answer.name}</button>
+                    <AnswerDiv key={answer.id}>
+                        <Button key={answer.id} onClick={handleChoice} >{answer.name}</Button>
+                    </AnswerDiv>
                 ))}
-                <p>Total Score: {totalScore}</p>
+                <Feedback>
+                    <Timer points={points} updatePoints={updatePoints} resetTimer={resetTimer} />
+                    <p>Total Score: {totalScore}</p>
+                </Feedback>
             </>
         )
     }
@@ -145,10 +161,9 @@ const Play = () => {
                 <Nav />
                 <p>You Win!</p>
                 <p>Total Score: {totalScore}</p>
-                {inTopTen && <p>You're in the top 10!</p>}
+                {inTopTen && <InputHighScore totalScore={scorePass} />}
                 <Scoreboard />
             </>
-
         )
     }
 
@@ -158,7 +173,7 @@ const Play = () => {
                 <Nav />
                 <p>Game Over</p>
                 <p>Total Score: {totalScore}</p>
-                {inTopTen && <p>You're in the top 10!</p>}
+                {inTopTen && <InputHighScore scorePass={scorePass} />}
                 <Scoreboard />
             </>
         )

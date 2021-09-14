@@ -6,8 +6,8 @@ const Timer = (props) => {
 
     useEffect(()=>{
     let myInterval = setInterval(() => {
-            if(props.resetTimer) setInsidePoints(500);
             setInsidePoints(insidePoints => insidePoints - 10);
+            if(props.resetTimer) setInsidePoints(500);
             props.updatePoints(insidePoints);
         }, 1000)
         return ()=> {

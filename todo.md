@@ -22,3 +22,4 @@
     - How to submit photos
     - Credits
     - Hire Me
+- Loading Component

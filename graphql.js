@@ -68,10 +68,10 @@ export const root = {
         return r;
     },
     highscores: async () => {
-        const r = await query("select * from highscores order by totalscore desc");
+        const r = await query("select * from highscores order by totalscore desc limit 10");
         return r;
     },
-    // Mutations
+    // Mutations --
     updateHighScore: async (args) => {
         const r = await query("insert into highscores set ?", [args]);
         return r;

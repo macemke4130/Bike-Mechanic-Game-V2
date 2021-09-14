@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 
 import { gql } from '../utils/gql';
 
-import Nav from './Nav';
-
 const Scoreboard = () => {
     const [loading, setLoading] = useState(true);
     const [highScores, setHighscores] = useState([]);

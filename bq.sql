@@ -43,5 +43,5 @@ create table highscores (
     club100num int,
     scoredate datetime default now()
 );
-select * from highscores;
+select * from highscores order by totalscore desc limit = 10;
 update highscores set club100num = null;
