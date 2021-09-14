@@ -13,7 +13,7 @@ create table parts (
 );
 
 insert into parts (win, lose1, lose2, lose3) values (
-	"STI Band Clamp Bolt", "Sram Direct Mount Brake Lever Bolt", "Fender Stay Bolt", "Quill Bolt"
+	"Magura Bleed Tool", "Shimano Bleed Block", "Jagwire Bleed Tool", "Shimano E-Tube Tool"
 );
 
 select * from parts;
@@ -30,7 +30,7 @@ create table photos (
 );
 
 insert into photos (part_id, filename) values (
-	2, "3715_lg_1000x.jpg"
+	5, "PXL_20210913_181950881"
 );
 
 select * from photos;
@@ -43,3 +43,5 @@ create table highscores (
     club100num int,
     scoredate datetime default now()
 );
+select * from highscores;
+update highscores set club100num = null;

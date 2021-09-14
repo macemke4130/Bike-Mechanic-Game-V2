@@ -3,17 +3,22 @@ import { useEffect, useState } from 'react';
 
 import { gql } from '../utils/gql';
 import Timer from '../components/Timer';
+import Nav from '../components/Nav';
+import Scoreboard from '../components/Scoreboard';
 const images = require.context('../../public/images', true);
 
 const Play = () => {
     const [loading, setLoading] = useState(true);
+    const [gameOver, setGameOver] = useState(false);
+    const [winner, setWinner] = useState(false);
     const [allParts, setAllParts] = useState([]);
     const [win, setWin] = useState("");
     const [answers, setAnswers] = useState([]);
     const [photos, setPhotos] = useState([]);
     const [index, setIndex] = useState(0);
     const [totalScore, setTotalScore] = useState(0);
-    const [points, setPoints] = useState(1000);
+    const [points, setPoints] = useState(500);
+    const [inTopTen, setInTopTen] = useState(false);
     const [resetTimer, setResetTimer] = useState(false);
 
     const getAllParts = async () => {
@@ -51,25 +56,13 @@ const Play = () => {
             setAnswers(shuffledAnswers);
             setWin(r.part.win);
 
-            if(index === 0) setIndex(1); // Fixes initial load index --
-
-            
-
+            if (index === 0) setIndex(1); // Fixes initial load index --
         } catch (e) {
             console.error("Getting Part ID: " + x + " - " + e);
         }
     }
 
-    const startPointsTimer = () => {
-        setPoints(1000);
-        const interval = setInterval(() => {
-            setPoints(points => points - 5);
-          }, 2500);
-          return () => clearInterval(interval);
-    }
-
     const getNext = () => {
-        startPointsTimer();
         setIndex(index + 1);
         const nextPartId = allParts[index].id;
         getPart(nextPartId);
@@ -77,25 +70,51 @@ const Play = () => {
 
     const handleChoice = (e) => {
         const selected = e.target.innerText;
+
         if (selected === win) {
             setTotalScore(totalScore + points);
             setResetTimer(true);
+
             if (index === allParts.length) {
                 // 100 Club Logic --
-                console.log("All Questions Answered Correct!");
+                gameWin();
                 return;
             }
-            setPoints(1000);
+
+            setPoints(500);
             getNext();
         } else {
-            // Game Over Logic --
-            console.log("Loser!");
+            gameLost();
         }
     }
 
     const updatePoints = (pointsFromTimer) => {
-       setPoints(pointsFromTimer);
-       setResetTimer(false);
+        setPoints(pointsFromTimer);
+        setResetTimer(false);
+        if (points < 0) gameLost();
+    }
+
+    const gameWin = () => {
+        setGameOver(true);
+        setWinner(true);
+        highScoreCheck();
+    }
+
+    const gameLost = () => {
+        setGameOver(true);
+        highScoreCheck();
+    }
+
+    const highScoreCheck = async () => {
+        const r = await gql(`{ highscores { totalscore } }`);
+        const lowestHighScore = r.highscores[r.highscores.length - 1].totalscore;
+        if (totalScore > lowestHighScore) updateHighScore();
+    }
+
+    const updateHighScore = async () => {
+        setInTopTen(true);
+        
+        // const r = 
     }
 
     useEffect(() => {
@@ -104,23 +123,46 @@ const Play = () => {
 
     if (loading) return "Loading Play...";
 
-    return (
-        <>
-        <Timer points={points} updatePoints={updatePoints} resetTimer={resetTimer} />
-            {
-                photos?.map(photo => (
+    if (gameOver === false) {
+        return (
+            <>
+                <Timer points={points} updatePoints={updatePoints} resetTimer={resetTimer} />
+                {photos?.map(photo => (
                     <img key={photo.id} src={photo.filename} alt="Part" width="500px" className="quiz-part" />
-                ))
-            }
-            <hr></hr>
-            {
-                answers?.map(answer => (
+                ))}
+                <hr></hr>
+                {answers?.map(answer => (
                     <button key={answer.id} onClick={handleChoice} >{answer.name}</button>
-                ))
-            }
-            <p>{totalScore}</p>
-        </>
-    )
+                ))}
+                <p>Total Score: {totalScore}</p>
+            </>
+        )
+    }
+
+    if (winner) {
+        return (
+            <>
+                <Nav />
+                <p>You Win!</p>
+                <p>Total Score: {totalScore}</p>
+                {inTopTen && <p>You're in the top 10!</p>}
+                <Scoreboard />
+            </>
+
+        )
+    }
+
+    if (gameOver) {
+        return (
+            <>
+                <Nav />
+                <p>Game Over</p>
+                <p>Total Score: {totalScore}</p>
+                {inTopTen && <p>You're in the top 10!</p>}
+                <Scoreboard />
+            </>
+        )
+    }
 }
 
 export default Play;

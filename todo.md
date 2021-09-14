@@ -1,6 +1,4 @@
-- Game is played until a wrong answer is given
-- Points go down the longer you take to answer
-- Points start at 100(?) and drop by 5 points every second
+
 - Each question has
     - 1 correct answer (win)
     - 3 pre-determined wrong answers (loseX)
@@ -8,13 +6,19 @@
     - 2 photos
 - Photos
     - Photo has white to transparant gradient on every side for infinity effect
-    - Both photos are shown at once
 - Answers
     - Each answer is a button with plenty of margin
-    - Clicking a button submits your answer
-    - No "Final Answer" logic
 - Game Over
     - Enter your name for high score if high score is in top 10
     - 100% gets your name in the 100 Club
 - Quiz Page
     - 1, 2, 3, 4 number keys correspond to button answers
+    - Make form submission component for high score entry
+- Scoreboard Page
+    - Nav
+    - Scoreboard Component
+- About
+    - Donate
+    - How to submit photos
+    - Credits
+    - Hire Me

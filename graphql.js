@@ -3,10 +3,15 @@ import { query } from "./dbconnect.js";
 
 export const schema = buildSchema(`
   type Query {
-      greet: String
-      allParts: [Part]
-      part(id: Int!): Part
-      photo(part_id: Int!): [Photo]
+    greet: String
+    allParts: [Part]
+    part(id: Int!): Part
+    photo(part_id: Int!): [Photo]
+    highscores: [HighScore]
+  }
+
+  type Mutation {
+    updateHighScore(name: String, totalScore: Int, club100: Boolean, club100num: Int): mysqlResponse
   }
 
   type Part {
@@ -22,6 +27,27 @@ export const schema = buildSchema(`
     part_id: Int
     filename: String
   }
+
+  type HighScore {
+    id: Int
+    name: String
+    totalscore: Int
+    club100: Boolean
+    club100num: Int
+    scoredate: String
+  }
+
+  type mysqlResponse {
+    fieldCount: Int
+    afffieldCount: Int
+    affectedRows: Int
+    insertId: Int
+    serverStatus: Int
+    warningCount: Int
+    message: String
+    protocol41: Boolean
+    changedRows: Int
+}
 
 `);
 
@@ -39,6 +65,15 @@ export const root = {
     },
     photo: async (args) => {
         const r = await query("select * from photos where part_id = ?", [args.part_id]);
+        return r;
+    },
+    highscores: async () => {
+        const r = await query("select * from highscores order by totalscore desc");
+        return r;
+    },
+    // Mutations
+    updateHighScore: async (args) => {
+        const r = await query("insert into highscores set ?", [args]);
         return r;
     }
 };

@@ -2,13 +2,13 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 
 const Timer = (props) => {
-    const [inpoints, setInpoints] = useState(props.points);
+    const [insidePoints, setInsidePoints] = useState(props.points);
 
     useEffect(()=>{
     let myInterval = setInterval(() => {
-            if(props.resetTimer) setInpoints(1000);
-            setInpoints(inpoints => inpoints - 5);
-            props.updatePoints(inpoints);
+            if(props.resetTimer) setInsidePoints(500);
+            setInsidePoints(insidePoints => insidePoints - 10);
+            props.updatePoints(insidePoints);
         }, 1000)
         return ()=> {
             clearInterval(myInterval);
@@ -16,7 +16,7 @@ const Timer = (props) => {
     });
 
     return (
-        <p>Points Remaining: {inpoints}</p>
+        <p>Points Remaining: {insidePoints}</p>
         
     )
 }
