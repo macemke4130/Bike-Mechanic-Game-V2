@@ -14,7 +14,6 @@ const InputHighScore = (props) => {
     }
 
     const submitHighScoreName = async () => {
-        console.log(props);
         if (highScoreName !== "") {
             try {
                 const r = await gql(` mutation { updateHighScore( 
@@ -26,7 +25,7 @@ const InputHighScore = (props) => {
                       insertId
                     }
                   }`);
-                if (r) history.push("/scoreboard");
+                if (r) props.refeshHighScore();
             } catch (e) {
                 console.error(e);
             }

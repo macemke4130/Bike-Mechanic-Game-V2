@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { gql } from '../utils/gql';
 
@@ -9,6 +10,8 @@ import Scoreboard from '../components/Scoreboard';
 import InputHighScore from '../components/InputHighScore';
 import Loading from '../components/Loading';
 import { Button, AnswerDiv, PartImg, PhotoContainer, Feedback, P } from '../components/styles/Play.style';
+import { YouAreWinner, YouAreLoser } from '../components/styles/ScoreBoard.style';
+import { HeadlineOne, CenteredColContainer } from '../components/styles/SSOT.style';
 
 const images = require.context('../../public/images', true);
 
@@ -17,6 +20,7 @@ const Play = () => {
     const [flag, setFlag] = useState(true);
     const [gameOver, setGameOver] = useState(false);
     const [winner, setWinner] = useState(false);
+    const [highScoreDisplay, setHighScoreDisplay] = useState(true);
     const [allParts, setAllParts] = useState([]);
     const [win, setWin] = useState("");
     const [answers, setAnswers] = useState([]);
@@ -30,6 +34,8 @@ const Play = () => {
     const [club100num, setClub100num] = useState(0);
     const [scorePass, setScorePass] = useState(null);
     const [resetTimer, setResetTimer] = useState(false);
+
+    const history = useHistory();
 
     const getAllParts = async () => {
         // Gets all parts and their id in from the database then shuffles them --
@@ -117,6 +123,10 @@ const Play = () => {
         }
     }
 
+    const handlePlayAgain = () => {
+        history.go(0);
+    }
+
     const updatePoints = (pointsFromTimer) => {
         // Update user's total points and resets timer --
 
@@ -160,6 +170,13 @@ const Play = () => {
         setInTopTen(true);
     }
 
+    const refeshHighScore = () => {
+        // Refreshes the scoreboard component when user enters their name --
+        
+        setHighScoreDisplay(false);
+        setHighScoreDisplay(true);
+    }
+
     useEffect(() => {
         // Preload next part photos after each correct answer --
 
@@ -199,10 +216,11 @@ const Play = () => {
     if (gameOver === false) {
         return (
             <>
+                <button onClick={() => { setWinner(true); setGameOver(true) }}>Winner</button>
                 <PhotoContainer>
                     {photos?.map(photo => (
                         <PartImg key={photo.id} src={photo.filename} alt="Part" />
-                    ))}
+                    ))} 
                 </PhotoContainer>
                 {answers?.map(answer => (
                     <AnswerDiv key={answer.id}>
@@ -224,11 +242,16 @@ const Play = () => {
     if (winner) {
         return (
             <>
+                <CenteredColContainer>
+                    <YouAreWinner>You Win!</YouAreWinner>
+                    <button onClick={handlePlayAgain}>Play Again?</button>
+                    <HeadlineOne>Total Score: {totalScore}</HeadlineOne>
+                    {inTopTen && <InputHighScore scorePass={scorePass} refeshHighScore={refeshHighScore} />}
+                </CenteredColContainer>
+                {highScoreDisplay && <Scoreboard refeshHighScore={refeshHighScore} />}
                 <Nav />
-                <p>You Win!</p>
-                <p>Total Score: {totalScore}</p>
-                {inTopTen && <InputHighScore scorePass={scorePass} />}
-                <Scoreboard />
+
+
             </>
         )
     }
@@ -236,11 +259,14 @@ const Play = () => {
     if (gameOver) {
         return (
             <>
+                <CenteredColContainer>
+                <YouAreLoser>Game Over</YouAreLoser>
+                    <button onClick={handlePlayAgain}>Play Again?</button>
+                    <HeadlineOne>Total Score: {totalScore}</HeadlineOne>
+                    {inTopTen && <InputHighScore scorePass={scorePass} refeshHighScore={refeshHighScore} />}
+                </CenteredColContainer>
+                {highScoreDisplay && <Scoreboard refeshHighScore={refeshHighScore} />}
                 <Nav />
-                <p>Game Over</p>
-                <p>Total Score: {totalScore}</p>
-                {inTopTen && <InputHighScore scorePass={scorePass} />}
-                <Scoreboard />
             </>
         )
     }

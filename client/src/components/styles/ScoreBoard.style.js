@@ -31,3 +31,29 @@ export const ScoreDate = styled.span`
     justify-content: flex-end;
     width: 33.3%;
 `;
+
+export const YouAreWinner = styled.div`
+    animation-name: Animate-In;
+    animation-duration: 1s;
+    animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+    font-size: 2em;
+
+    @keyframes Animate-In {
+        0%   {font-size: 0.1em;}
+        90% {font-size: 2.5em;}
+        100% {font-size: 2em;}
+    }
+`;
+
+export const YouAreLoser = styled.div`
+    animation-name: Animate-In;
+    animation-duration: 1s;
+    animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+    font-size: 2em;
+
+    @keyframes Animate-In {
+        0%   {font-size: 0.1em;}
+        90% {font-size: 2.5em;}
+        100% {font-size: 2em;}
+    }
+`;

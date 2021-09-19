@@ -30,7 +30,7 @@ create table photos (
 );
 
 insert into photos (part_id, filename) values (
-	5, "PXL_20210913_181950881"
+	6, "PXL_20210913_181928888"
 );
 
 select * from photos;
@@ -43,5 +43,6 @@ create table highscores (
     club100num int,
     scoredate datetime default now()
 );
+delete from highscores where totalscore > 500;
 select * from highscores order by totalscore desc limit 10;
 update highscores set club100num = null;

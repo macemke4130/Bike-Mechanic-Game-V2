@@ -28,7 +28,7 @@ export const AnswerDiv = styled.div`
 `;
 
 export const PartImg = styled.img`
-    width: 45%;
+    height: 45vh;
     border-radius: 1em;
     border: 1px solid black;
     margin: 0.25em;
