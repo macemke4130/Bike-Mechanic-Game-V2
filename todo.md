@@ -1,4 +1,3 @@
-
 - Each question has
     - 1 correct answer (win)
     - 3 pre-determined wrong answers (loseX)
@@ -25,4 +24,3 @@
     - Hire Me
 - Loading Component
 - Home page should be rules and a still of the gameplay
-- Front load only the next question's images while user is on a question

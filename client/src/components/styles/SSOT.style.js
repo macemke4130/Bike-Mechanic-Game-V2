@@ -1,0 +1,1 @@
+export const font = "'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif";

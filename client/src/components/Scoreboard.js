@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
+import Loading from './Loading';
+
 import { gql } from '../utils/gql';
 
 const Scoreboard = () => {
@@ -17,7 +19,7 @@ const Scoreboard = () => {
         if (loading) getHighScores();
     })
 
-    if (loading) return "Loading...";
+    if (loading) return <Loading />;
 
     return (
         <>

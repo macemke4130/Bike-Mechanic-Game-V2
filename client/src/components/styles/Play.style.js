@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-
-const font = "'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif";
+import { font } from './SSOT.style';
 
 export const Button = styled.button`
     font-family: ${font};
