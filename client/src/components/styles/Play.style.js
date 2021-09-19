@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 
+const font = "'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif";
+
 export const Button = styled.button`
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: ${font};
     color: black;
     font-size: 1.2em;
     font-weight: 400;
@@ -42,4 +44,8 @@ export const PhotoContainer = styled.div`
 export const Feedback = styled.div`
     display: flex;
     justify-content: space-between;
+`;
+
+export const P = styled.p`
+    font-family: ${font};
 `;

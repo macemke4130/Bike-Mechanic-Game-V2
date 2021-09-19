@@ -13,7 +13,7 @@ create table parts (
 );
 
 insert into parts (win, lose1, lose2, lose3) values (
-	"Magura Bleed Tool", "Shimano Bleed Block", "Jagwire Bleed Tool", "Shimano E-Tube Tool"
+	"Rotor Lock Washer", "Rotor Shim", "Flat Brake Shim", "Spoke Washer"
 );
 
 select * from parts;
@@ -43,5 +43,5 @@ create table highscores (
     club100num int,
     scoredate datetime default now()
 );
-select * from highscores order by totalscore desc limit = 10;
+select * from highscores order by totalscore desc limit 10;
 update highscores set club100num = null;

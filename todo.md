@@ -14,6 +14,7 @@
 - Quiz Page
     - 1, 2, 3, 4 number keys correspond to button answers
     - Make form submission component for high score entry
+    - Needs to shuffle all the parts
 - Scoreboard Page
     - Nav
     - Scoreboard Component
@@ -23,3 +24,5 @@
     - Credits
     - Hire Me
 - Loading Component
+- Home page should be rules and a still of the gameplay
+- Front load only the next question's images while user is on a question

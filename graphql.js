@@ -6,6 +6,7 @@ export const schema = buildSchema(`
     greet: String
     allParts: [Part]
     part(id: Int!): Part
+    allPhotos: [Photo]
     photo(part_id: Int!): [Photo]
     highscores: [HighScore]
   }
@@ -62,6 +63,10 @@ export const root = {
     part: async (args) => {
         const r = await query("select * from parts where id = ?", [args.id]);
         return r[0];
+    },
+    allPhotos: async () => {
+      const r = await query("select * from photos");
+      return r;
     },
     photo: async (args) => {
         const r = await query("select * from photos where part_id = ?", [args.part_id]);
