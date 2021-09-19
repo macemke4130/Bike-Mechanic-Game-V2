@@ -1,5 +1,6 @@
 import { buildSchema } from 'graphql';
 import { query } from "./dbconnect.js";
+import dayjs from 'dayjs';
 
 export const schema = buildSchema(`
   type Query {
@@ -74,6 +75,11 @@ export const root = {
     },
     highscores: async () => {
         const r = await query("select * from highscores order by totalscore desc limit 10");
+        
+        for (let i = 0; i < r.length; i++) {
+          const dateFormat = dayjs(r[i].scoredate).format("MMM DD, YYYY");
+          r[i].scoredate = dateFormat;
+      }
         return r;
     },
     // Mutations --

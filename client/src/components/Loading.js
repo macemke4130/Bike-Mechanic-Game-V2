@@ -1,14 +1,15 @@
 import * as React from 'react';
 
 import Spinner from "../svg/spinner.svg";
-import { LoadingContainer, LoadingTitle, LoadingSpinner } from './styles/Loading.style';
+import { CenteredColContainer, HeadlineOne } from './styles/SSOT.style';
+import { LoadingSpinner } from './styles/Loading.style';
 
 const Loading = (props) => {
     return (
-        <LoadingContainer>
-            <LoadingTitle>Loading...</LoadingTitle>
+        <CenteredColContainer>
+            <HeadlineOne>Loading...</HeadlineOne>
             <LoadingSpinner src={Spinner} alt="Spinner Bicycle Wheel" />
-        </LoadingContainer>
+        </CenteredColContainer>
     )
 }
 

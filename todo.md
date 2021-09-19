@@ -22,5 +22,6 @@
     - How to submit photos
     - Credits
     - Hire Me
-- Loading Component
 - Home page should be rules and a still of the gameplay
+- Scoreboard
+    - TotalScore on input

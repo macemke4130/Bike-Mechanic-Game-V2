@@ -160,12 +160,6 @@ const Play = () => {
         setInTopTen(true);
     }
 
-    const showNextPart = () => {
-        // For testing only --
-
-        console.log(allParts);
-    }
-
     useEffect(() => {
         // Preload next part photos after each correct answer --
 
@@ -205,7 +199,6 @@ const Play = () => {
     if (gameOver === false) {
         return (
             <>
-                <button onClick={showNextPart}>Show Next Part</button>
                 <PhotoContainer>
                     {photos?.map(photo => (
                         <PartImg key={photo.id} src={photo.filename} alt="Part" />
@@ -234,7 +227,7 @@ const Play = () => {
                 <Nav />
                 <p>You Win!</p>
                 <p>Total Score: {totalScore}</p>
-                {inTopTen && <InputHighScore totalScore={scorePass} />}
+                {inTopTen && <InputHighScore scorePass={scorePass} />}
                 <Scoreboard />
             </>
         )

@@ -14,6 +14,7 @@ const InputHighScore = (props) => {
     }
 
     const submitHighScoreName = async () => {
+        console.log(props);
         if (highScoreName !== "") {
             try {
                 const r = await gql(` mutation { updateHighScore( 
@@ -36,7 +37,7 @@ const InputHighScore = (props) => {
         <>
             <p>You're in the top ten high scores!</p>
             <p>Enter your name.</p>
-            <input type="text" id="name" col={50} onChange={handleName} value={highScoreName}></input>
+            <input type="text" id="name" col={50} onChange={handleName} value={highScoreName} autoComplete="off"></input>
             <button onClick={submitHighScoreName}>Submit</button>
         </>
     )
