@@ -10,7 +10,7 @@ export const HighScoreDiv = styled.div`
     background-color: lightgray;
     text-align: center;
 
-    &:nth-of-type(odd) {
+    &:nth-of-type(even) {
         background-color: white;
     }
 `;
